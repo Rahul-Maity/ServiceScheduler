@@ -50,7 +50,7 @@ public class CancellationTests
 
         var second = await _w.NewBooking().CancelAsync(key, booked.Id);
 
-        Assert.Equal(first, second);
+        Assert.Equal(first, second with { IsReplay = false });
         Assert.Equal(savesBefore, _w.Store.SaveCalls);
     }
 

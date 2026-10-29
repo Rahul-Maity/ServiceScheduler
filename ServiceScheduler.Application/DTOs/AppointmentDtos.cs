@@ -20,4 +20,6 @@ public sealed record AppointmentDto(
     DateTimeOffset EndAt,
     string Status,
     DateTimeOffset CreatedAt,
-    DateTimeOffset? CancelledAt);
+    DateTimeOffset? CancelledAt,
+    /// <summary>True when this is the stored result of an earlier request with the same Idempotency-Key.</summary>
+    bool IsReplay = false);

@@ -14,6 +14,7 @@ public sealed class AppointmentsController(IBookingService booking, IIdempotency
     [HttpPost]
     [RequiresIdempotencyKey]
     [ProducesResponseType<AppointmentResponse>(StatusCodes.Status201Created)]
+    [ProducesResponseType<AppointmentResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
@@ -27,7 +28,13 @@ public sealed class AppointmentsController(IBookingService booking, IIdempotency
             new BookAppointmentRequest(request.CustomerId, request.VehicleId, request.DealershipId, request.ServiceTypeId, startAt),
             cancellationToken);
 
-        return CreatedAtAction(nameof(Get), new { id = appointment.Id }, appointment.ToResponse());
+        var response = appointment.ToResponse();
+        if (appointment.IsReplay)
+        {
+            return Ok(response with { Message = "This appointment is already booked. Returning the original booking for this Idempotency-Key." });
+        }
+
+        return CreatedAtAction(nameof(Get), new { id = appointment.Id }, response);
     }
 
     [HttpGet("{id:guid}")]

@@ -1,6 +1,0 @@
-{
-  "ServiceScheduler.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\admin\\Desktop\\ServiceScheduler\\ServiceScheduler.Api",
-  "ServiceScheduler.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\admin\\Desktop\\ServiceScheduler\\ServiceScheduler.Application",
-  "ServiceScheduler.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\admin\\Desktop\\ServiceScheduler\\ServiceScheduler.Domain",
-  "ServiceScheduler.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\admin\\Desktop\\ServiceScheduler\\ServiceScheduler.Infrastructure"
-}

@@ -83,7 +83,7 @@ public class ApplicationIntegrationTests(PostgresFixture fixture) : IClassFixtur
         await using var db2 = fixture.CreateContext();
         var second = await NewBooking(db2).BookAsync(key, Request(w, At(10)));
 
-        Assert.Equal(first, second);
+        Assert.Equal(first, second with { IsReplay = false });
         await using var read = fixture.CreateContext();
         Assert.Equal(1, await read.Appointments.CountAsync(a => a.DealershipId == w.Dealership.Id));
     }
@@ -190,7 +190,7 @@ public class ApplicationIntegrationTests(PostgresFixture fixture) : IClassFixtur
         var first = await NewBooking(db2).CancelAsync(key, booked.Id);
 
         await using var db3 = fixture.CreateContext();
-        Assert.Equal(first, await NewBooking(db3).CancelAsync(key, booked.Id));
+        Assert.Equal(first, (await NewBooking(db3).CancelAsync(key, booked.Id)) with { IsReplay = false });
         await using var db4 = fixture.CreateContext();
         await Assert.ThrowsAsync<InvalidStateTransitionException>(() => NewBooking(db4).CancelAsync(NewKey(), booked.Id));
     }

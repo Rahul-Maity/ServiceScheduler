@@ -130,9 +130,13 @@ public sealed class BookingService(
             return null;
         }
 
-        return record.RequestHash == requestHash
-            ? JsonSerializer.Deserialize<AppointmentDto>(record.ResponseJson)
-            : throw new IdempotencyConflictException();
+        if (record.RequestHash != requestHash)
+        {
+            throw new IdempotencyConflictException();
+        }
+
+        var original = JsonSerializer.Deserialize<AppointmentDto>(record.ResponseJson);
+        return original is null ? null : original with { IsReplay = true };
     }
 
     private IdempotencyRecord NewRecord(string key, string requestHash, AppointmentDto response) =>

@@ -16,7 +16,7 @@ public class IdempotencyTests
 
         var second = await _w.NewBooking().BookAsync(key, _w.Request(At(10)));
 
-        Assert.Equal(first, second);
+        Assert.Equal(first, second with { IsReplay = false });
         Assert.Equal(1, _w.Store.SaveCalls);
         Assert.Equal(queriesBefore, _w.Store.ResourceQueries);
         Assert.Single(_w.Store.Appointments);
@@ -31,7 +31,7 @@ public class IdempotencyTests
         var second = await _w.NewBooking().BookAsync(key,
             _w.Request(new DateTimeOffset(2030, 1, 7, 15, 30, 0, TimeSpan.FromHours(5.5))));
 
-        Assert.Equal(first, second);
+        Assert.Equal(first, second with { IsReplay = false });
         Assert.Single(_w.Store.Appointments);
     }
 
@@ -65,7 +65,7 @@ public class IdempotencyTests
 
         var replay = await _w.NewBooking().BookAsync(key, _w.Request(At(10)));
 
-        Assert.Equal(booked, replay);
+        Assert.Equal(booked, replay with { IsReplay = false });
         Assert.Equal("Confirmed", replay.Status);
     }
 
@@ -82,7 +82,7 @@ public class IdempotencyTests
         var result = await _w.NewBooking().BookAsync(key, request);
 
         Assert.NotNull(winner);
-        Assert.Equal(winner, result);
+        Assert.Equal(winner, result with { IsReplay = false });
         Assert.Single(_w.Store.Appointments);
         Assert.Single(_w.Store.Records);
     }
@@ -105,7 +105,7 @@ public class IdempotencyTests
         var result = await _w.NewBooking().BookAsync(key, request);
 
         Assert.NotNull(winner);
-        Assert.Equal(winner, result);
+        Assert.Equal(winner, result with { IsReplay = false });
         Assert.Single(_w.Store.Appointments);
     }
 

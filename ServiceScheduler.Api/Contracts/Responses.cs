@@ -19,7 +19,9 @@ public sealed record AppointmentResponse(
     DateTimeOffset EndAt,
     string Status,
     DateTimeOffset CreatedAt,
-    DateTimeOffset? CancelledAt);
+    DateTimeOffset? CancelledAt,
+    /// <summary>Set only when the booking request was repeated with the same Idempotency-Key.</summary>
+    string? Message = null);
 
 internal static class ResponseMapping
 {
